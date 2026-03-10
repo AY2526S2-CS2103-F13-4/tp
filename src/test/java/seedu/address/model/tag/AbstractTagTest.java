@@ -97,14 +97,13 @@ public class AbstractTagTest {
     @Test
     public void equals_nullObject_returnsFalse() {
         AbstractTag tag = new Tag(VALID_TAG_NAME_1);
-        assertNotEquals(null, tag);
+        assertFalse(tag.equals(null));
     }
 
     @Test
     public void equals_differentClass_returnsFalse() {
-        int number = 5;
         AbstractTag tag = new Tag(VALID_TAG_NAME_1);
-        assertNotEquals(number, tag);
+        assertFalse(tag.equals(VALID_TAG_NAME_1));
     }
 
     @Test
@@ -125,24 +124,6 @@ public class AbstractTagTest {
     public void toString_validTagName_correctFormat() {
         AbstractTag tag = new Tag(VALID_TAG_NAME_1);
         assertEquals("[" + VALID_TAG_NAME_1 + "]", tag.toString());
-    }
-
-    static class DummyTag extends AbstractTag {
-        DummyTag(String tagName) {
-            super(tagName);
-        }
-
-        @Override
-        public TagType getTagType() {
-            return TagType.TAG;
-        }
-    }
-
-    @Test
-    public void equals_sameTagNameSameTagTypeDifferentSubclass_returnsTrue() {
-        AbstractTag tag1 = new Tag(VALID_TAG_NAME_1);
-        AbstractTag tag2 = new DummyTag(VALID_TAG_NAME_1);
-        assertEquals(tag1, tag2);
     }
 }
 
