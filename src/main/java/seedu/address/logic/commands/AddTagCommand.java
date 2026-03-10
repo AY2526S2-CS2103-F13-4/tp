@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -43,6 +44,8 @@ public class AddTagCommand extends Command {
      * @param tags  a set of tag(s) to be added to the person located at index
      */
     public AddTagCommand(Index targetPersonIndex, Set<Tag> tags) {
+        requireNonNull(targetPersonIndex);
+        requireNonNull(tags);
         this.targetPersonIndex = targetPersonIndex;
         this.tagsToAdd = tags;
     }
@@ -60,19 +63,22 @@ public class AddTagCommand extends Command {
         var duplicatedTags = findDuplicateTags(personToEdit.getTags());
         var newTags = appendTags(personToEdit.getTags());
 
-        Person editedPerson = new Person(personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(),
-                personToEdit.getAddress(), newTags);
-
+        Person editedPerson = personToEdit.cloneInto(p -> {
+            p.setTags(newTags);
+        });
         model.setPerson(personToEdit, editedPerson);
 
         var outMessage = String.format(MESSAGE_ADD_SUCCESS, Messages.format(editedPerson))
                 + formatDuplicateTagMessage(duplicatedTags);
+
+        // FIXME: is there any expectation to reset the model's filtered view after
+        // execution?
         return new CommandResult(outMessage);
     }
 
     /**
-     * Formats a message to inform the user about duplicate tags that were ignored
-     * during addition. If no duplicates exist, returns an empty string.
+     * Formats a message to inform the user about duplicate tags that are to be
+     * ignored during addition. If no duplicates exist, returns an empty string.
      *
      * @param duplicates List of duplicate tags that were already present in the
      *                   person's tags.
@@ -89,15 +95,14 @@ public class AddTagCommand extends Command {
 
     /**
      * Identifies which tags from the tagsToAdd set already exist in the person's
-     * current tags. This helps determine which tags will be ignored during addition
-     * (as they are duplicates).
+     * current tags.
      *
      * @param existing The set of tags currently assigned to the existing person.
      * @return A list of duplicate tags that are already present in the person's
      *         tags.
      */
     private List<Tag> findDuplicateTags(Set<Tag> existing) {
-        return existing.stream().filter(t -> tagsToAdd.contains(t)).toList();
+        return existing.stream().filter(tagsToAdd::contains).toList();
     }
 
     /**
@@ -112,6 +117,27 @@ public class AddTagCommand extends Command {
         var newTags = new HashSet<>(existing);
         newTags.addAll(tagsToAdd);
         return newTags;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof AddTagCommand)) {
+            return false;
+        }
+
+        AddTagCommand o = (AddTagCommand) other;
+        return targetPersonIndex.equals(o.targetPersonIndex) && tagsToAdd.equals(o.tagsToAdd);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).add("targetPersonIndex", targetPersonIndex).add("tagsToAdd", tagsToAdd)
+                .toString();
     }
 
 }
