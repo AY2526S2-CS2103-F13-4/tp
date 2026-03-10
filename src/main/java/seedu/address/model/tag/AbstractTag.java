@@ -43,11 +43,10 @@ public abstract class AbstractTag {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Tag)) {
+        if (!(other instanceof AbstractTag otherTag)) {
             return false;
         }
 
-        Tag otherTag = (Tag) other;
         return tagName.equals(otherTag.tagName) && getTagType() == otherTag.getTagType();
     }
 
