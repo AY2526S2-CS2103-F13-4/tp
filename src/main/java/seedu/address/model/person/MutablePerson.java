@@ -1,5 +1,7 @@
 package seedu.address.model.person;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Set;
 
 import seedu.address.model.person.exceptions.ImmutableEscapedScopeException;
@@ -31,31 +33,37 @@ public class MutablePerson extends Person {
 
     public void setName(Name name) {
         checkEditable();
+        requireNonNull(name);
         this.name = name;
     }
 
     public void setPhone(Phone phone) {
         checkEditable();
+        requireNonNull(phone);
         this.phone = phone;
     }
 
     public void setEmail(Email email) {
         checkEditable();
+        requireNonNull(email);
         this.email = email;
     }
 
     public void setUsername(Username username) {
         checkEditable();
+        requireNonNull(username);
         this.username = username;
     }
 
     public void setRole(Role role) {
         checkEditable();
+        requireNonNull(role);
         this.role = role;
     }
 
     public void setTags(Set<Tag> tags) {
         checkEditable();
+        requireNonNull(tags);
         this.tags = tags;
     }
 

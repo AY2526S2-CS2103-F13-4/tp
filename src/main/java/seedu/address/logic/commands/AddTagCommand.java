@@ -34,7 +34,7 @@ public class AddTagCommand extends Command {
     //@formatter:on
 
     public static final String MESSAGE_ADD_SUCCESS = "Successfully added tag(s) to Person: %1$s";
-    public static final String MESSAGE_WARNING_DUPLICATE = "WARNING, the following tags were ignored"
+    public static final String MESSAGE_WARNING_DUPLICATE = "WARNING, the following tags were ignored "
             + "as they already exist: %1$s";
 
     private Index targetPersonIndex;

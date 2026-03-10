@@ -94,6 +94,49 @@ public class AddTagCommandTest {
     }
 
     @Test
+    public void execute_withDuplicateTags() {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        // put data that we know
+        Person editedPerson = personToEdit.cloneInto(p -> {
+            p.setTags(TAGS_TO_ADD);
+        });
+        model.setPerson(personToEdit, editedPerson);
+
+        personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        HashSet<Tag> tagsToAdd = new HashSet<>(List.of(new Tag("tut5"), new Tag("newtag")));
+
+        // verify that there will be duplicates
+        boolean hasDuplicate = false;
+        for (Tag tag : personToEdit.getTags()) {
+            if (tagsToAdd.contains(tag)) {
+                hasDuplicate = true;
+                break;
+            }
+        }
+        assertTrue(hasDuplicate);
+
+        AddTagCommand addTagCommand = new AddTagCommand(INDEX_FIRST_PERSON, tagsToAdd);
+
+        HashSet<Tag> allTags = new HashSet<>(personToEdit.getTags());
+        allTags.addAll(tagsToAdd);
+
+        editedPerson = personToEdit.cloneInto(p -> {
+            p.setTags(allTags);
+        });
+
+        // Construct expected message with duplicate warning
+        StringBuilder sb = new StringBuilder();
+        sb.append(new Tag("tut5"));
+        String expectedMessage = String.format(AddTagCommand.MESSAGE_ADD_SUCCESS, Messages.format(editedPerson)) + "\n"
+                + String.format(AddTagCommand.MESSAGE_WARNING_DUPLICATE, sb.toString());
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(addTagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void equals() {
         AddTagCommand c1 = new AddTagCommand(INDEX_SECOND_PERSON, TAGS_TO_ADD);
         AddTagCommand c2 = new AddTagCommand(INDEX_SECOND_PERSON, TAGS_TO_ADD);
