@@ -1,0 +1,121 @@
+package seedu.address.logic.commands;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalPersons.BENSON;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
+
+import java.util.HashSet;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
+import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
+
+public class AddTagCommandTest {
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+    final HashSet<Tag> TAGS_TO_ADD = new HashSet<>(List.of(new Tag("lab1"), new Tag("tut5")));
+
+    @Test
+    public void addTag_normal_success() {
+        final HashSet<Tag> TAGS_TO_EXPECT = new HashSet<>(TAGS_TO_ADD);
+        TAGS_TO_EXPECT.addAll(BENSON.getTags());
+
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        AddTagCommand addTagCommand = new AddTagCommand(INDEX_SECOND_PERSON, TAGS_TO_ADD);
+
+        Person editedPerson = personToEdit.cloneInto(p -> {
+            p.setTags(TAGS_TO_EXPECT);
+        });
+
+        String expectedMessage = String.format(AddTagCommand.MESSAGE_ADD_SUCCESS, Messages.format(editedPerson));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(addTagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void addTag_filteredList_success() {
+        showPersonAtIndex(model, INDEX_SECOND_PERSON);
+
+        final HashSet<Tag> TAGS_TO_EXPECT = new HashSet<>(TAGS_TO_ADD);
+        TAGS_TO_EXPECT.addAll(BENSON.getTags());
+
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        AddTagCommand addTagCommand = new AddTagCommand(INDEX_FIRST_PERSON, TAGS_TO_ADD);
+
+        Person editedPerson = personToEdit.cloneInto(p -> {
+            p.setTags(TAGS_TO_EXPECT);
+        });
+
+        String expectedMessage = String.format(AddTagCommand.MESSAGE_ADD_SUCCESS, Messages.format(editedPerson));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        showPersonAtIndex(expectedModel, INDEX_SECOND_PERSON);
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(addTagCommand, model, expectedMessage, expectedModel);
+        model.updateFilteredPersonList(p -> true);
+    }
+
+    @Test
+    public void addTag_invalidIndex_success() {
+        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+
+        AddTagCommand addTagCommand = new AddTagCommand(outOfBoundIndex, TAGS_TO_ADD);
+        assertCommandFailure(addTagCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void addTag_invalidIndexFiltered_success() {
+        showPersonAtIndex(model, INDEX_SECOND_PERSON);
+
+        Index outOfBoundIndex = INDEX_SECOND_PERSON;
+        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
+
+        AddTagCommand addTagCommand = new AddTagCommand(INDEX_SECOND_PERSON, TAGS_TO_ADD);
+        assertCommandFailure(addTagCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+
+        model.updateFilteredPersonList(p -> true);
+    }
+
+    @Test
+    public void equals() {
+        AddTagCommand c1 = new AddTagCommand(INDEX_SECOND_PERSON, TAGS_TO_ADD);
+        AddTagCommand c2 = new AddTagCommand(INDEX_SECOND_PERSON, TAGS_TO_ADD);
+        AddTagCommand c3 = new AddTagCommand(INDEX_SECOND_PERSON, new HashSet<>());
+        AddTagCommand c4 = new AddTagCommand(INDEX_FIRST_PERSON, TAGS_TO_ADD);
+
+        assertTrue(c1.equals(c1));
+        assertTrue(c1.equals(c2));
+
+        assertTrue(!c1.equals(1));
+        assertTrue(!c1.equals(null));
+        assertTrue(!c1.equals(c3));
+        assertTrue(!c1.equals(c4));
+    }
+
+    @Test
+    public void toStringMethod() {
+        Index targetIndex = Index.fromOneBased(1);
+        AddTagCommand deleteCommand = new AddTagCommand(targetIndex, TAGS_TO_ADD);
+        String expected = AddTagCommand.class.getCanonicalName() + "{targetPersonIndex=" + targetIndex + ", tagsToAdd="
+                + TAGS_TO_ADD + "}";
+        assertEquals(expected, deleteCommand.toString());
+    }
+
+}
