@@ -43,7 +43,7 @@ public class StringUtil {
      * Ignores case, does not require a full word match.
      * <br>
      * examples:
-     * 
+     *
      * <pre>
      *       containsWordIgnoreCase("ABc def", "abc") == true
      *       containsWordIgnoreCase("ABc def", "DEF") == true
@@ -51,7 +51,7 @@ public class StringUtil {
      *       containsWordIgnoreCase("ABc def", "AC") == false
      *       containsWordIgnoreCase("ABc def", "c d") == true
      * </pre>
-     * 
+     *
      * @param sentence  cannot be null
      * @param substring cannot be null, cannot be empty
      */
