@@ -30,4 +30,9 @@ public class CourseTag extends Tag {
     public static boolean isValidCourseCode(String test) {
         return test.length() <= 10 && test.matches(COURSE_CODE_VALIDATION_REGEX);
     }
+
+    @Override
+    public String toString() {
+        return "[Course:%s]".formatted(tagName);
+    }
 }

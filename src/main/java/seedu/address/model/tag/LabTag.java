@@ -30,4 +30,9 @@ public class LabTag extends Tag {
     public static boolean isValidLabCode(String test) {
         return test.length() <= 5 && test.matches(LAB_CODE_VALIDATION_REGEX);
     }
+
+    @Override
+    public String toString() {
+        return "[Lab:%s]".formatted(tagName);
+    }
 }

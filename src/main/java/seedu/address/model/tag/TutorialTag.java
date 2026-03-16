@@ -30,4 +30,9 @@ public class TutorialTag extends Tag {
     public static boolean isValidTutorialCode(String test) {
         return test.length() <= 5 && test.matches(TUTORIAL_CODE_VALIDATION_REGEX);
     }
+
+    @Override
+    public String toString() {
+        return "[Tutorial:%s]".formatted(tagName);
+    }
 }
