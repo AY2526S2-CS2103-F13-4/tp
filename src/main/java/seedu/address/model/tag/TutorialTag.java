@@ -6,6 +6,8 @@ package seedu.address.model.tag;
  */
 public class TutorialTag extends Tag {
 
+    public static final String TUTORIAL_CODE_MESSAGE_CONSTRAINTS =
+            "Tutorial codes should be T/TUT+numbers and no more than 5 characters";
     private static final String TUTORIAL_CODE_VALIDATION_REGEX = "^(T|TUT)[0-9]+$";
 
     /**
@@ -26,8 +28,6 @@ public class TutorialTag extends Tag {
      * Returns true if a given string is a valid course code.
      */
     public static boolean isValidTutorialCode(String test) {
-        return test.length() <= 5
-                && test.matches(VALIDATION_REGEX)
-                && test.matches(TUTORIAL_CODE_VALIDATION_REGEX);
+        return test.length() <= 5 && test.matches(TUTORIAL_CODE_VALIDATION_REGEX);
     }
 }

@@ -13,7 +13,7 @@ public class TutorialTagTest {
     private static final String VALID_TUTORIAL_CODE_1 = "T1";
     private static final String VALID_TUTORIAL_CODE_2 = "TUT10";
     private static final String INVALID_TUTORIAL_CODE_EMPTY = "";
-    private static final String INVALID_TUTORIAL_CODE_TOO_LONG = "TUT1234567890"; // >10 chars
+    private static final String INVALID_TUTORIAL_CODE_TOO_LONG = "TUT1234"; // >5 chars
     private static final String INVALID_TUTORIAL_CODE_WRONG_FORMAT = "t1"; // lowercase
     private static final String INVALID_TUTORIAL_CODE_NO_NUMBER = "T"; // no number
     private static final String INVALID_TUTORIAL_CODE_INVALID_PREFIX = "U1"; // wrong prefix

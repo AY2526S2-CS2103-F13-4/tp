@@ -13,7 +13,7 @@ public class LabTagTest {
     private static final String VALID_LAB_CODE_1 = "L1";
     private static final String VALID_LAB_CODE_2 = "LAB10";
     private static final String INVALID_LAB_CODE_EMPTY = "";
-    private static final String INVALID_LAB_CODE_TOO_LONG = "LAB1234567890"; // >10 chars
+    private static final String INVALID_LAB_CODE_TOO_LONG = "LAB1234"; // >5 chars
     private static final String INVALID_LAB_CODE_WRONG_FORMAT = "l1"; // lowercase
     private static final String INVALID_LAB_CODE_NO_NUMBER = "L"; // no number
     private static final String INVALID_LAB_CODE_INVALID_PREFIX = "A1"; // wrong prefix
