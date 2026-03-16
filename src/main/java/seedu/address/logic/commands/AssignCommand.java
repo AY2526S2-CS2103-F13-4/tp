@@ -17,7 +17,6 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.tag.Tag;
-import seedu.address.model.tag.TagType;
 
 /**
  * Assign a person to a group.
@@ -58,9 +57,8 @@ public class AssignCommand extends Command {
 
         Person personToAssign = lastShownList.get(index.getZeroBased());
 
-        Set<TagType> groupTagTypes = groupTags.stream().map(Tag::getTagType).collect(Collectors.toSet());
         Set<Tag> newTags = personToAssign.getTags().stream()
-                .filter(tag -> !groupTagTypes.contains(tag.getTagType()))
+                .filter(tag -> !groupTags.contains(tag))
                 .collect(Collectors.toSet());
         newTags.addAll(groupTags);
 
