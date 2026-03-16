@@ -14,7 +14,11 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Position;
 import seedu.address.model.person.Username;
+import seedu.address.model.tag.CourseTag;
+import seedu.address.model.tag.LabTag;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.TagType;
+import seedu.address.model.tag.TutorialTag;
 
 /**
  * Contains utility methods used for parsing strings in the various *Parser classes.
@@ -22,6 +26,10 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    public static final String MESSAGE_INVALID_GROUP_TYPE = """
+            Group type is not valid. Valid group prefixes are: \
+            cou/ for course, tut/ for tutorial, lab/ for lab.
+            """;
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -136,5 +144,40 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a {@code String groupTag} into a subclass object of {@code Tag} by the {@code groupTagType}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code groupTag} or {@code groupTagType} is invalid.
+     */
+    public static Tag parseGroupTag(String groupTag, TagType groupTagType) throws ParseException {
+        requireNonNull(groupTag);
+        requireNonNull(groupTagType);
+
+        String trimmedGroupTag = groupTag.trim();
+        if (!Tag.isValidTagName(trimmedGroupTag)) {
+            throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
+        }
+
+        if (groupTagType.equals(TagType.COURSE)) {
+            if (!CourseTag.isValidCourseCode(trimmedGroupTag)) {
+                throw new ParseException(CourseTag.MESSAGE_CONSTRAINTS);
+            }
+            return new CourseTag(trimmedGroupTag);
+        } else if (groupTagType.equals(TagType.TUTORIAL)) {
+            if (!TutorialTag.isValidTutorialCode(trimmedGroupTag)) {
+                throw new ParseException(TutorialTag.MESSAGE_CONSTRAINTS);
+            }
+            return new TutorialTag(trimmedGroupTag);
+        } else if (groupTagType.equals(TagType.LAB)) {
+            if (!LabTag.isValidLabCode(trimmedGroupTag)) {
+                throw new ParseException(LabTag.MESSAGE_CONSTRAINTS);
+            }
+            return new LabTag(trimmedGroupTag);
+        } else {
+            throw new ParseException(MESSAGE_INVALID_GROUP_TYPE);
+        }
     }
 }

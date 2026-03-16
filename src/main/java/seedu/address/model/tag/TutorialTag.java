@@ -6,7 +6,7 @@ package seedu.address.model.tag;
  */
 public class TutorialTag extends Tag {
 
-    public static final String TUTORIAL_CODE_MESSAGE_CONSTRAINTS =
+    public static final String MESSAGE_CONSTRAINTS =
             "Tutorial codes should be T/TUT+numbers and no more than 5 characters";
     private static final String TUTORIAL_CODE_VALIDATION_REGEX = "^(T|TUT)[0-9]+$";
 

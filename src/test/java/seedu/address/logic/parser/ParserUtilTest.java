@@ -19,7 +19,11 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Position;
 import seedu.address.model.person.Username;
+import seedu.address.model.tag.CourseTag;
+import seedu.address.model.tag.LabTag;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.TagType;
+import seedu.address.model.tag.TutorialTag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
@@ -218,5 +222,58 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseGroupTag_nullGroupTag_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseGroupTag(null, TagType.COURSE));
+    }
+
+    @Test
+    public void parseGroupTag_nullGroupTagType_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseGroupTag("CS2103", null));
+    }
+
+    @Test
+    public void parseGroupTag_invalidTagName_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseGroupTag("#invalid", TagType.COURSE));
+    }
+
+    @Test
+    public void parseGroupTag_courseTag_returnsCourseTag() throws Exception {
+        Tag expectedTag = new CourseTag("CS2103");
+        assertEquals(expectedTag, ParserUtil.parseGroupTag("CS2103", TagType.COURSE));
+    }
+
+    @Test
+    public void parseGroupTag_tutorialTag_returnsTutorialTag() throws Exception {
+        Tag expectedTag = new TutorialTag("T1");
+        assertEquals(expectedTag, ParserUtil.parseGroupTag("T1", TagType.TUTORIAL));
+    }
+
+    @Test
+    public void parseGroupTag_labTag_returnsLabTag() throws Exception {
+        Tag expectedTag = new LabTag("L1");
+        assertEquals(expectedTag, ParserUtil.parseGroupTag("L1", TagType.LAB));
+    }
+
+    @Test
+    public void parseGroupTag_invalidCourseCode_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseGroupTag("invalid", TagType.COURSE));
+    }
+
+    @Test
+    public void parseGroupTag_invalidTutorialCode_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseGroupTag("invalid", TagType.TUTORIAL));
+    }
+
+    @Test
+    public void parseGroupTag_invalidLabCode_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseGroupTag("invalid", TagType.LAB));
+    }
+
+    @Test
+    public void parseGroupTag_invalidGroupTagType_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseGroupTag("tag", TagType.TAG));
     }
 }

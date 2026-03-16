@@ -6,7 +6,7 @@ package seedu.address.model.tag;
  */
 public class LabTag extends Tag {
 
-    public static final String LAB_CODE_MESSAGE_CONSTRAINTS =
+    public static final String MESSAGE_CONSTRAINTS =
             "Lab codes should be L/LAB+numbers and no more than 5 characters";
     private static final String LAB_CODE_VALIDATION_REGEX = "^(L|LAB)[0-9]+$";
 

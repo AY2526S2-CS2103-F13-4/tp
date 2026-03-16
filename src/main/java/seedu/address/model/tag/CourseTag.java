@@ -6,7 +6,7 @@ package seedu.address.model.tag;
  */
 public class CourseTag extends Tag {
 
-    public static final String COURSE_CODE_MESSAGE_CONSTRAINTS =
+    public static final String MESSAGE_CONSTRAINTS =
             "Courses codes should be letters+numbers+letters and no more than 10 characters";
     private static final String COURSE_CODE_VALIDATION_REGEX = "[A-Z]+[0-9]+[A-Z]*$";
 
