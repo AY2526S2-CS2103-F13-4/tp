@@ -25,7 +25,7 @@ class JsonAdaptedTag {
     /**
      * Converts a given {@code Tag} into this class for Jackson use.
      */
-    public JsonAdaptedTag(Tag source) {
+    public JsonAdaptedTag(AbstractTag source) {
         tagName = source.tagName;
     }
 
@@ -40,6 +40,7 @@ class JsonAdaptedTag {
      * @throws IllegalValueException if there were any data constraints violated in the adapted tag.
      */
     public Tag toModelType() throws IllegalValueException {
+        // TODO: change this to parse restrictedtag as well
         if (!Tag.isValidTagName(tagName)) {
             throw new IllegalValueException(AbstractTag.MESSAGE_CONSTRAINTS);
         }
