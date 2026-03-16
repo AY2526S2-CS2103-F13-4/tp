@@ -124,6 +124,6 @@ public class CourseTagTest {
     @Test
     public void toString_returnsFormattedString() {
         CourseTag courseTag = new CourseTag(VALID_COURSE_CODE_1);
-        assertEquals("[" + VALID_COURSE_CODE_1 + "]", courseTag.toString());
+        assertEquals("[" + "Course:" + VALID_COURSE_CODE_1 + "]", courseTag.toString());
     }
 }

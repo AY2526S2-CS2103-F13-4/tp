@@ -125,6 +125,6 @@ public class LabTagTest {
     @Test
     public void toString_returnsFormattedString() {
         LabTag labTag = new LabTag(VALID_LAB_CODE_1);
-        assertEquals("[" + VALID_LAB_CODE_1 + "]", labTag.toString());
+        assertEquals("[" + "Lab:" + VALID_LAB_CODE_1 + "]", labTag.toString());
     }
 }

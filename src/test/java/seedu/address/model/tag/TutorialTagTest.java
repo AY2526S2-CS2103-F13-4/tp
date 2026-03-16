@@ -125,6 +125,6 @@ public class TutorialTagTest {
     @Test
     public void toString_returnsFormattedString() {
         TutorialTag tutorialTag = new TutorialTag(VALID_TUTORIAL_CODE_1);
-        assertEquals("[" + VALID_TUTORIAL_CODE_1 + "]", tutorialTag.toString());
+        assertEquals("[" + "Tutorial:" + VALID_TUTORIAL_CODE_1 + "]", tutorialTag.toString());
     }
 }
