@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 
 public class AbstractTagTest {
 
-    private static final String VALID_TAG_NAME_1 = "friend";
-    private static final String VALID_TAG_NAME_2 = "colleague";
-    private static final String VALID_TAG_NAME_WITH_NUMBERS = "tag123";
-    private static final String INVALID_TAG_NAME_EMPTY = "";
-    private static final String INVALID_TAG_NAME_SPACES = "tag with spaces";
-    private static final String INVALID_TAG_NAME_SPECIAL_CHARS = "tag@friend";
+    public static final String VALID_TAG_NAME_1 = "friend";
+    public static final String VALID_TAG_NAME_2 = "colleague";
+    public static final String VALID_TAG_NAME_WITH_NUMBERS = "tag123";
+    public static final String INVALID_TAG_NAME_EMPTY = "";
+    public static final String INVALID_TAG_NAME_SPACES = "tag with spaces";
+    public static final String INVALID_TAG_NAME_SPECIAL_CHARS = "tag@friend";
 
     @Test
     public void constructor_null_throwsNullPointerException() {

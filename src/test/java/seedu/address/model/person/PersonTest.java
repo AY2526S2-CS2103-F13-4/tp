@@ -2,7 +2,6 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
@@ -63,7 +62,7 @@ public class PersonTest {
         assertTrue(ALICE.equals(ref.inner));
         assertThrows(ImmutableEscapedScopeException.class, () -> {
             ref.inner.setName(new Name("this should fail"));
-        }, "Expected Person to be immutable after escaping scope");
+        });
     }
 
     @Test
@@ -108,8 +107,8 @@ public class PersonTest {
     @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", username=" + ALICE.getUsername()
-                + ", tags=" + ALICE.getTags() + "}";
+                + ", email=" + ALICE.getEmail() + ", username=" + ALICE.getUsername() + ", tags=" + ALICE.getTags()
+                + "}";
         assertEquals(expected, ALICE.toString());
     }
 
