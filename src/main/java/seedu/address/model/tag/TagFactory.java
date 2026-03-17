@@ -13,8 +13,12 @@ import seedu.address.model.tag.restricted.TutorialTagSchema;
  * string representation. It supports both standard tags and restricted tags
  * (tags containing a delimiter).
  */
-public class TagFactory {
+public final class TagFactory {
     public static final String UNKNOWN_SCHEMA_MESSAGE = "Specified Restricted Tag of prefix %s is unknown";
+
+    // all the methods are static, this should not be called
+    private TagFactory() {
+    }
 
     /**
      * Retrieves the associated {@link TagSchema} for a given tag prefix. If the

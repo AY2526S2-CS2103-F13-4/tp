@@ -38,6 +38,6 @@ public class TutorialTagSchemaTest {
 
     @Test
     public void getVariant() {
-        assertEquals("tut", schema.getVariant());
+        assertEquals(TutorialTagSchema.VARIANT, schema.getVariant());
     }
 }

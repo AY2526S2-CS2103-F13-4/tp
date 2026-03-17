@@ -27,6 +27,9 @@ public abstract class RegexTagSchema extends TagSchema {
 
     @Override
     public boolean isTagValid(String tag) {
+        if (tag == null) {
+            return false;
+        }
         return pattern.matcher(tag).matches();
     }
 }

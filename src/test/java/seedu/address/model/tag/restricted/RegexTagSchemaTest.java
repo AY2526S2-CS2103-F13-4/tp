@@ -60,6 +60,12 @@ public class RegexTagSchemaTest {
     }
 
     @Test
+    public void isTagValid_null_returnsFalse() {
+        RegexTagSchemaStub schema = new RegexTagSchemaStub(WHITELIST_PREFIX, VALID_PATTERN);
+        assertFalse(schema.isTagValid(null));
+    }
+
+    @Test
     public void isTagValid_validTag_returnsTrue() {
         RegexTagSchemaStub schema = new RegexTagSchemaStub(WHITELIST_PREFIX, VALID_PATTERN);
         assertTrue(schema.isTagValid(VALID_TAG));
