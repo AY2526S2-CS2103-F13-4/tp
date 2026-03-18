@@ -15,7 +15,7 @@ public class CourseTagSchema extends RegexTagSchema {
             + "followed by 4 numbers, and an optional uppercase suffix. Valid: 'CS2103T', 'MA1521', 'GESS1000T'";
 
     /**
-     * Constructs a {@code TutorialTagSchema}.
+     * Constructs a {@code CourseTagSchema}.
      */
     public CourseTagSchema() {
         super(VARIANT, TAG_PATTERN);

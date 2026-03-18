@@ -2,6 +2,8 @@ package seedu.address.model.tag;
 
 import static java.util.Objects.requireNonNull;
 
+import seedu.address.model.tag.restricted.CourseTagSchema;
+import seedu.address.model.tag.restricted.LabTagSchema;
 import seedu.address.model.tag.restricted.RestrictedTag;
 import seedu.address.model.tag.restricted.TagSchema;
 import seedu.address.model.tag.restricted.TutorialTagSchema;
@@ -33,6 +35,8 @@ public final class TagFactory {
         // CHECKSTYLE.OFF: Indentation
         return switch (prefix) {
             case TutorialTagSchema.VARIANT -> new TutorialTagSchema();
+            case LabTagSchema.VARIANT -> new LabTagSchema();
+            case CourseTagSchema.VARIANT -> new CourseTagSchema();
             default -> throw new IllegalArgumentException(String.format(UNKNOWN_SCHEMA_MESSAGE, prefix));
         };
         // CHECKSTYLE.ON: Indentation
@@ -53,7 +57,7 @@ public final class TagFactory {
         if (RestrictedTag.isRestrictedTag(trimmedTag)) {
             var prefix = RestrictedTag.TagParts.parse(trimmedTag).get().prefix;
             var schema = getAssociatedSchema(prefix);
-            return new RestrictedTag(schema, tag);
+            return new RestrictedTag(schema, trimmedTag);
         }
 
         if (!Tag.isValidTagName(trimmedTag)) {

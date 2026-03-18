@@ -51,6 +51,10 @@ public class RestrictedTag extends AbstractTag {
         return TagType.TAG;
     }
 
+    public TagSchema getSchema() {
+        return schema;
+    }
+
     /**
      * Checks if a given string contains the restricted tag delimiter.
      *

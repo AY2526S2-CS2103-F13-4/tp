@@ -16,7 +16,7 @@ public class LabTagSchema extends RegexTagSchema {
             + "followed by maximum 2 numbers. Valid: 'D24' and '8'";
 
     /**
-     * Constructs a {@code TutorialTagSchema}.
+     * Constructs a {@code LabTagSchema}.
      */
     public LabTagSchema() {
         super(VARIANT, TAG_PATTERN);
