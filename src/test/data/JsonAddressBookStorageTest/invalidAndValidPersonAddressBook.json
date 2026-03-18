@@ -1,15 +1,19 @@
 {
   "persons": [ {
     "name": "Valid Person",
-    "phone": "9482424",
+    "phone": "94824240",
     "email": "hans@example.com",
-    "username": "valid_person",
-    "role": "Student"
+    "username": "validperson",
+    "type": "student",
+    "position": null,
+    "tags": []
   }, {
     "name": "Person With Invalid Phone Field",
     "phone": "948asdf2424",
     "email": "hans@example.com",
-    "username": "invalid_phone_person",
-    "role": "Student"
+    "username": "invalidphoneperson",
+    "type": "student",
+    "position": null,
+    "tags": []
   } ]
 }
