@@ -195,6 +195,17 @@ The following sequence diagram shows how the `tutorslot 1 mon-10-12` command is 
 
 ![TutorSlotSequenceDiagram](images/TutorSlotSequenceDiagram.png)
 
+#### Viewing Availability: `tutordashboard`
+
+The `TutorDashboardCommand` is a read-only command that produces a formatted availability summary for all teaching staff.
+
+Key design decisions:
+
+* **Reads from the full address book** (`model.getAddressBook().getPersonList()`), not the filtered list. This ensures the dashboard is always complete even when the user has filtered to show only students.
+* **Sorted display** — slots for each staff member are inserted into a `TreeSet`, which uses `TimeSlot`'s natural ordering (day-of-week first, then start time) via its `Comparable` implementation.
+* **No model mutation** — the command produces only a `CommandResult`; it does not modify any data.
+* **No parser needed** — the command takes no arguments and is returned directly by `AddressBookParser`.
+
 #### Design Considerations
 
 **Aspect: Where to store availability**
@@ -351,6 +362,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | professor                          | archive a completed semester’s cohort                  | start each new semester with a clean state                             |
 | `*`      | professor                          | record short notes about students                      | recall important context when meeting them again in future semesters   |
 | `* *`    | tutor/professor                    | state when I am available to teach                     | specify my availability so students know when I can teach             |
+| `* *`    | tutor/professor                    | view the availability of all tutors in one place       | see who is able to teach at a glance                                  |
 
 ### Use cases
 
@@ -499,6 +511,31 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ---
 
+**Use case: UC09 – View tutor availability dashboard**
+
+**MSS**
+
+1. User enters `tutordashboard`.
+2. Doritus displays a numbered list of all teaching staff, each with their available time slots sorted by day and start time.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. There are no teaching staff in the address book.
+
+  * 2a1. Doritus shows a message indicating no teaching staff were found.
+
+    Use case ends.
+
+* 2b. A teaching staff member has no time slots set.
+
+  * 2b1. Doritus shows `(no slots set)` for that staff member.
+
+    Use case continues from step 2 for remaining staff.
+
+---
+
 **Use case: UC05 – Prepare a tutorial group contact list for attendance**
 
 **MSS**
@@ -612,6 +649,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Position**: The role of a teaching staff member; only "Teaching Assistant" and "Professors" are allowed.
 * **Tag**: A short label attached to a contact (e.g., module code, tutorial group, lab group) used for grouping and filtering contacts.
 * **Tutorial group / Lab group**: A subgroup of students within a module, usually associated with a specific weekly session; commonly represented as tags in Doritus.
+* **Time slot**: A day-of-week and hour range (e.g., Monday 10:00–12:00) representing when a teaching staff member is available to teach. Stored as `TimeSlot` objects in a `Set<TimeSlot>` on each `TeachingStaff`. Added with `tutorslot`; viewed with `tutordashboard`.
 * **Mainstream OS**: Windows, Linux, macOS.
 
 --------------------------------------------------------------------------------------------------------------------
