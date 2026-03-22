@@ -100,7 +100,7 @@ public class AddressBookParser {
 
         case ExportCommand.COMMAND_WORD:
             return new ExportCommandParser().parse(arguments);
-            
+
         case TutorDashboardCommand.COMMAND_WORD:
             return new TutorDashboardCommand();
 
