@@ -88,7 +88,7 @@ public class FindCommand extends Command {
      * corresponding field value of the person.
      */
     public static class FindPersonDescriptor {
-        private final Predicate<Person> PREDICATE_TRUE = x -> true;
+        private static final Predicate<Person> PREDICATE_TRUE = x -> true;
         private Set<String> name;
         private Set<Phone> phone;
         private Set<Email> email;
