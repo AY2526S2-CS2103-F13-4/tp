@@ -88,6 +88,7 @@ public class FindCommand extends Command {
      * corresponding field value of the person.
      */
     public static class FindPersonDescriptor {
+        private final Predicate<Person> PREDICATE_TRUE = x -> true;
         private Set<String> name;
         private Set<Phone> phone;
         private Set<Email> email;
@@ -116,7 +117,7 @@ public class FindCommand extends Command {
         }
 
         public Predicate<Person> getNamePredicate() {
-            return (name != null) ? new NameContainsKeywordsPredicate(new ArrayList<>(name)) : x -> true;
+            return (name != null) ? new NameContainsKeywordsPredicate(new ArrayList<>(name)) : PREDICATE_TRUE;
         }
 
         public void setPhone(Set<Phone> phone) {
@@ -153,7 +154,7 @@ public class FindCommand extends Command {
         }
 
         public Predicate<Person> getTagsPredicate() {
-            return (tags != null) ? new TagsContainsTagPredicate(tags) : x -> true;
+            return (tags != null) ? new TagsContainsTagPredicate(tags) : PREDICATE_TRUE;
         }
 
         @Override
