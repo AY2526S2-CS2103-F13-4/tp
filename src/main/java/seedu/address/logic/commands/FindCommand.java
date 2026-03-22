@@ -50,7 +50,8 @@ public class FindCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
 
-        Predicate<Person> predicate = findPersonDescriptor.getNamePredicate();
+        Predicate<Person> predicate = findPersonDescriptor.getNamePredicate()
+                .and(findPersonDescriptor.getTagsPredicate());
 
         model.updateFilteredPersonList(predicate);
         return new CommandResult(
@@ -146,6 +147,10 @@ public class FindCommand extends Command {
          */
         public Optional<Set<AbstractTag>> getTags() {
             return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
+        }
+
+        public Predicate<Person> getTagsPredicate() {
+            return (tags != null) ? new TagsContainsTagPredicate(tags) : x -> true;
         }
 
         @Override
