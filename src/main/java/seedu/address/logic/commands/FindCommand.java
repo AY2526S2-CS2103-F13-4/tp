@@ -14,10 +14,8 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.person.Email;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Phone;
 import seedu.address.model.person.TagsContainsTagPredicate;
 import seedu.address.model.tag.AbstractTag;
 
