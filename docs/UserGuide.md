@@ -34,6 +34,10 @@ title: User Guide
 
    * `staffslist` : Lists only teaching staff. `studentslist` : Lists only students.
 
+   * `tutorslot 2 mon-10-12` : Adds Monday 10:00–12:00 availability to the 2nd person in the list (must be teaching staff).
+
+   * `tutordashboard` : Shows all teaching staff and their available time slots.
+
    * `delete 3` : Deletes the 3rd person shown in the current list (works for both students and staff).
 
    * `clear` : Deletes all contacts.
@@ -147,6 +151,64 @@ Shows only teaching staff in the address book.
 Shows only students (persons who are not teaching staff) in the address book.
 
 **Format:** `studentslist`
+
+---
+
+### Adding a tutor availability slot : `tutorslot`
+
+Adds an availability time slot to a teaching staff member. This allows tutors and professors to specify when they are available to teach.
+
+**Format:** `tutorslot INDEX SLOT`
+
+**Parameters:**
+
+* `INDEX`: Must be a positive integer (1, 2, 3, …) referring to the position of a **teaching staff member** in the **currently displayed** list.
+* `SLOT`: Must be in format `DAY-START-END`, where:
+  * `DAY` is one of: `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun` (case-insensitive).
+  * `START` and `END` are hours (0–23). `START` must be before `END`.
+
+**Behavior:**
+
+* The person at the given index must be a teaching staff member (not a student).
+* Duplicate time slots (same day, same start/end) are not allowed for the same person.
+* Time slots are displayed in the UI beneath the staff member's contact details.
+* Time slots are persisted in the data file.
+
+**Examples:**
+
+* `staffslist` then `tutorslot 1 mon-10-12` — Adds Monday 10:00–12:00 availability to the 1st teaching staff.
+* `tutorslot 2 wed-14-16` — Adds Wednesday 14:00–16:00 availability to the 2nd person (must be staff).
+* `tutorslot 1 fri-9-17` — Adds Friday 09:00–17:00 availability to the 1st person (must be staff).
+
+---
+
+### Viewing tutor availability dashboard : `tutordashboard`
+
+Displays a dashboard of all teaching staff and their available time slots, regardless of the currently displayed list.
+
+**Format:** `tutordashboard`
+
+**Behavior:**
+
+* Shows **all** teaching staff in the address book — not just those visible in the current filtered list.
+* For each staff member, lists their time slots sorted by day and start time.
+* Displays `(no slots set)` for staff members who have no slots added yet.
+
+**Example output:**
+
+```
+Tutor Availability Dashboard (3 tutor(s)):
+1. Benson Meier: Mon 10:00-12:00, Wed 14:00-16:00
+2. Daniel Meier: (no slots set)
+3. George Best: Fri 09:00-11:00
+```
+
+**Examples:**
+
+* `tutordashboard` — Shows the full availability dashboard for all teaching staff.
+* After `tutorslot 1 mon-10-12`, run `tutordashboard` to confirm the slot was added.
+
+---
 
 ### Editing a person : `edit`
 
@@ -275,6 +337,8 @@ _Details coming soon ..._
 | **List all** | `list` |
 | **List staff only** | `staffslist` |
 | **List students only** | `studentslist` |
+| **Tutor slot** | `tutorslot INDEX SLOT` <br> e.g., `tutorslot 1 mon-10-12` |
+| **Tutor dashboard** | `tutordashboard` |
 | **Edit** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [u/USERNAME] [pos/POSITION] [t/TAG]…​` <br> e.g., `edit 2 n/James Lee e/jameslee@example.com` or `edit 1 pos/Professors` (staff only) |
 | **Find** | `find KEYWORD [MORE_KEYWORDS]` <br> e.g., `find James Jake` |
 | **Delete** | `delete INDEX` <br> e.g., `delete 3` (index from current list: full, staff, or students) |
