@@ -52,7 +52,6 @@ public class ImportCommand extends Command {
         } catch (IOException e) {
             throw new CommandException(MESSAGE_IO_EXCEPTION);
         } catch (DeserialisePersonException e) {
-            System.out.println(e);
             throw new CommandException(MESSAGE_DESERIALISE_EXCEPTION);
         }
     }
