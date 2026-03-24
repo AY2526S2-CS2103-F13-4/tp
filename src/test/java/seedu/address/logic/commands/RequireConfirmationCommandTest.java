@@ -20,11 +20,11 @@ public class RequireConfirmationCommandTest {
     public void constructor_validInputs_success() {
         String userInput = "clear";
         Command mockCommand = new ClearCommand();
-        
+
         RequireConfirmationCommand requireConfirmationCommand = new RequireConfirmationCommand(userInput, mockCommand);
-        
+
         assertNotNull(requireConfirmationCommand);
-        assertEquals(mockCommand, requireConfirmationCommand.getCommand());
+        assertEquals(mockCommand, requireConfirmationCommand.getPendingCommand());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class RequireConfirmationCommandTest {
         RequireConfirmationCommand requireConfirmationCommand = new RequireConfirmationCommand(userInput, mockCommand);
 
         CommandResult result = requireConfirmationCommand.execute(model);
-        
+
         assertEquals(true, result.getFeedbackToUser().contains(userInput));
     }
 
@@ -63,7 +63,7 @@ public class RequireConfirmationCommandTest {
 
         CommandResult result = requireConfirmationCommand.execute(model);
         String feedback = result.getFeedbackToUser();
-        
+
         assertEquals(true, feedback.contains(AnswerConfirmationCommand.COMMAND_WORD_YES));
         assertEquals(true, feedback.contains(AnswerConfirmationCommand.COMMAND_WORD_NO));
     }

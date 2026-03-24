@@ -66,17 +66,17 @@ public class AddressBookParserTest {
     public void parseCommand_clear() throws Exception {
         Command command = parser.parseCommand(ClearCommand.COMMAND_WORD);
         assertTrue(command instanceof RequireConfirmationCommand);
-        assertTrue(((RequireConfirmationCommand) command).getCommand() instanceof ClearCommand);
+        assertTrue(((RequireConfirmationCommand) command).getPendingCommand() instanceof ClearCommand);
         command = parser.parseCommand(ClearCommand.COMMAND_WORD + " 3");
         assertTrue(command instanceof RequireConfirmationCommand);
-        assertTrue(((RequireConfirmationCommand) command).getCommand() instanceof ClearCommand);
+        assertTrue(((RequireConfirmationCommand) command).getPendingCommand() instanceof ClearCommand);
     }
 
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) ((RequireConfirmationCommand) parser.parseCommand(
                 DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()))
-                .getCommand();
+                .getPendingCommand();
         assertEquals(new DeleteCommand(INDEX_FIRST_PERSON), command);
     }
 

@@ -5,6 +5,9 @@ import java.util.Objects;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 
+/**
+ * Represents a command that answers a confirmation prompt for a pending command.
+ */
 public class AnswerConfirmationCommand extends Command {
 
     public static final String COMMAND_WORD_YES = "Y";
@@ -27,6 +30,10 @@ public class AnswerConfirmationCommand extends Command {
         this(answerType, null);
     }
 
+    /**
+     * @param answerType The type of answer provided by the user.
+     * @param pendingCommand The pending command to be executed is confirmed
+     */
     public AnswerConfirmationCommand(AnswerType answerType, Command pendingCommand) {
         Objects.requireNonNull(answerType);
         this.answerType = answerType;
@@ -39,18 +46,18 @@ public class AnswerConfirmationCommand extends Command {
             throw new CommandException(MESSAGE_NO_PENDING_COMMAND);
         }
         switch (answerType) {
-            case YES -> {
-                return pendingCommand.execute(model);
-            }
-            case NO -> {
-                return new CommandResult(MESSAGE_COMMAND_CANCELLED);
-            }
-            default -> throw new CommandException(String.format(
-                    MESSAGE_UNKNOWN_ANSWER,
-                    answerType,
-                    COMMAND_WORD_YES,
-                    COMMAND_WORD_NO
-            ));
+        case YES -> {
+            return pendingCommand.execute(model);
+        }
+        case NO -> {
+            return new CommandResult(MESSAGE_COMMAND_CANCELLED);
+        }
+        default -> throw new CommandException(String.format(
+                MESSAGE_UNKNOWN_ANSWER,
+                answerType,
+                COMMAND_WORD_YES,
+                COMMAND_WORD_NO
+        ));
         }
     }
 
@@ -70,6 +77,9 @@ public class AnswerConfirmationCommand extends Command {
                 && Objects.equals(this.pendingCommand, other.pendingCommand);
     }
 
+    /**
+     * The type of answer provided by the user for a confirmation prompt.
+     */
     public enum AnswerType {
         YES,
         NO

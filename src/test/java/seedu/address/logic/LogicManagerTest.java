@@ -119,15 +119,6 @@ public class LogicManagerTest {
     }
 
     /**
-     * Executes the command that requires user confirmation.
-     * Confirms that a CommandException is thrown and that the result message is correct.
-     * @see #assertCommandFailure(String, Class, String, Model)
-     */
-    private void assertCommandRequiresConfirmationException(String inputCommand, String expectedMessage) {
-        assertCommandRequiresConfirmationFailure(inputCommand, CommandException.class, expectedMessage);
-    }
-
-    /**
      * Executes the command, confirms that the exception is thrown and that the result message is correct.
      * @see #assertCommandFailure(String, Class, String, Model)
      */
@@ -135,17 +126,6 @@ public class LogicManagerTest {
             String expectedMessage) {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         assertCommandFailure(inputCommand, expectedException, expectedMessage, expectedModel);
-    }
-
-    /**
-     * Executes the command that requires user confirmation.
-     * Confirms that a CommandException is thrown and that the result message is correct.
-     * @see #assertCommandFailure(String, Class, String, Model)
-     */
-    private void assertCommandRequiresConfirmationFailure(String inputCommand, Class<? extends Throwable> expectedException,
-                                      String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandRequiresConfirmationFailure(inputCommand, expectedException, expectedMessage, expectedModel);
     }
 
     /**
@@ -159,6 +139,28 @@ public class LogicManagerTest {
             String expectedMessage, Model expectedModel) {
         assertThrows(expectedException, expectedMessage, () -> logic.execute(inputCommand));
         assertEquals(expectedModel, model);
+    }
+
+    /**
+     * Executes the command that requires user confirmation.
+     * Confirms that a CommandException is thrown and that the result message is correct.
+     * @see #assertCommandFailure(String, Class, String, Model)
+     */
+    private void assertCommandRequiresConfirmationException(String inputCommand, String expectedMessage) {
+        assertCommandRequiresConfirmationFailure(inputCommand, CommandException.class, expectedMessage);
+    }
+
+    /**
+     * Executes the command that requires user confirmation.
+     * Confirms that a CommandException is thrown and that the result message is correct.
+     * @see #assertCommandFailure(String, Class, String, Model)
+     */
+    private void assertCommandRequiresConfirmationFailure(
+            String inputCommand,
+            Class<? extends Throwable> expectedException,
+            String expectedMessage) {
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        assertCommandRequiresConfirmationFailure(inputCommand, expectedException, expectedMessage, expectedModel);
     }
 
     /**

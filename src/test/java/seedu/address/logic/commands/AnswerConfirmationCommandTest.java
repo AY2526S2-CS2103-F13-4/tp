@@ -23,23 +23,19 @@ public class AnswerConfirmationCommandTest {
 
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-    // ==================== execute() — null pending command ====================
-
     @Test
-    public void execute_noPendingCommand_yesAnswer_throwsCommandException() {
+    public void execute_yesAnswer_noPendingCommandThrowsCommandException() {
         AnswerConfirmationCommand command =
                 new AnswerConfirmationCommand(AnswerConfirmationCommand.AnswerType.YES);
         assertCommandFailure(command, model, AnswerConfirmationCommand.MESSAGE_NO_PENDING_COMMAND);
     }
 
     @Test
-    public void execute_noPendingCommand_noAnswer_throwsCommandException() {
+    public void execute_noAnswer_noPendingCommandThrowsCommandException() {
         AnswerConfirmationCommand command =
                 new AnswerConfirmationCommand(AnswerConfirmationCommand.AnswerType.NO);
         assertCommandFailure(command, model, AnswerConfirmationCommand.MESSAGE_NO_PENDING_COMMAND);
     }
-
-    // ==================== execute() — NO answer ====================
 
     @Test
     public void execute_noAnswer_returnsCancelledMessage() {
@@ -60,10 +56,8 @@ public class AnswerConfirmationCommandTest {
         assertEquals(expectedModel.getAddressBook(), model.getAddressBook());
     }
 
-    // ==================== execute() — YES answer ====================
-
     @Test
-    public void execute_yesAnswer_withPendingClearCommand_clearsModel() {
+    public void execute_yesAnswer_clearsModel() {
         AnswerConfirmationCommand command = new AnswerConfirmationCommand(
                 AnswerConfirmationCommand.AnswerType.YES, new ClearCommand());
 
@@ -74,7 +68,7 @@ public class AnswerConfirmationCommandTest {
     }
 
     @Test
-    public void execute_yesAnswer_withPendingDeleteCommand_deletesPerson() {
+    public void execute_yesAnswer_deletesPerson() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         AnswerConfirmationCommand command = new AnswerConfirmationCommand(
                 AnswerConfirmationCommand.AnswerType.YES, new DeleteCommand(INDEX_FIRST_PERSON));
@@ -87,8 +81,6 @@ public class AnswerConfirmationCommandTest {
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
-
-    // ==================== getAnswerType() ====================
 
     @Test
     public void getAnswerType_yesAnswer_returnsYes() {
@@ -103,8 +95,6 @@ public class AnswerConfirmationCommandTest {
                 new AnswerConfirmationCommand(AnswerConfirmationCommand.AnswerType.NO);
         assertEquals(AnswerConfirmationCommand.AnswerType.NO, command.getAnswerType());
     }
-
-    // ==================== equals() ====================
 
     @Test
     public void equals_sameObject_returnsTrue() {

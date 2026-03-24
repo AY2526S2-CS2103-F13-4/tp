@@ -3,6 +3,10 @@ package seedu.address.logic.commands;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 
+/**
+ * Represents a command that requires user confirmation before execution.
+ * When executed, it prompts the user to confirm
+ */
 public class RequireConfirmationCommand extends Command {
 
     public static final String MESSAGE_REQUIRE_CONFIRMATION = """
@@ -12,11 +16,15 @@ public class RequireConfirmationCommand extends Command {
             """;
 
     private final String userInput;
-    private final Command command;
+    private final Command pendingCommand;
 
-    public RequireConfirmationCommand(String userInput, Command command) {
+    /**
+     * @param userInput the command text input by the user
+     * @param pendingCommand the pending command to be executed if the user confirms
+     */
+    public RequireConfirmationCommand(String userInput, Command pendingCommand) {
         this.userInput = userInput;
-        this.command = command;
+        this.pendingCommand = pendingCommand;
     }
 
     @Override
@@ -29,7 +37,7 @@ public class RequireConfirmationCommand extends Command {
         ));
     }
 
-    public Command getCommand() {
-        return command;
+    public Command getPendingCommand() {
+        return pendingCommand;
     }
 }
