@@ -35,7 +35,7 @@ public class RequireConfirmationCommand extends Command {
                 userInput,
                 AnswerConfirmationCommand.COMMAND_WORD_YES,
                 AnswerConfirmationCommand.COMMAND_WORD_NO
-        ));
+        ), false, false, true);
     }
 
     /**

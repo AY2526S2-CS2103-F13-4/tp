@@ -40,7 +40,7 @@ public class RequireConfirmationCommandTest {
                 AnswerConfirmationCommand.COMMAND_WORD_NO
         );
 
-        CommandResult expectedCommandResult = new CommandResult(expectedFeedback);
+        CommandResult expectedCommandResult = new CommandResult(expectedFeedback, false, false, true);
         assertCommandSuccess(requireConfirmationCommand, model, expectedCommandResult, expectedModel);
     }
 
