@@ -59,10 +59,7 @@ public class CsvExporterTest {
                 .build();
 
         String csv = CsvExporter.convertToCsv(student);
-
-        assertTrue(csv.contains("Alice Smith"));
-        assertTrue(csv.contains("cs2103;tutee") || csv.contains("tutee;cs2103"));
-        assertTrue(csv.contains("Student"));
+        assertEquals("Student,Alice Smith,81234567,alicesmith,alice@example.com,cs2103;tutee", csv);
     }
 
     @Test
@@ -96,11 +93,8 @@ public class CsvExporterTest {
                 java.util.Set.of(slot1, slot2));
 
         String csv = CsvExporter.convertToCsv(staff);
-
-        assertTrue(csv.contains("Prof Alice"));
-        assertTrue(csv.contains("Professors"));
-        assertTrue(csv.contains("lecturer"));
-        assertTrue(csv.contains("mon-10-12") && csv.contains("wed-14-16"));
+        String expected = "Professors,Prof Alice,91111111,profalice,protalice@example.com,lecturer,mon-10-12;wed-14-16";
+        assertEquals(expected, csv);
     }
 
     @Test
@@ -117,6 +111,7 @@ public class CsvExporterTest {
         assertTrue(content.contains(CsvExporter.HEADERS));
         assertTrue(content.contains(ALICE.getName().toString()));
         assertTrue(content.contains(BENSON.getName().toString()));
+        Files.delete(filePath);
     }
 
     @Test
