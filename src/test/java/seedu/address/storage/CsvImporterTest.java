@@ -1,7 +1,20 @@
 package seedu.address.storage;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.BOB;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.person.Email;
@@ -16,18 +29,6 @@ import seedu.address.model.tag.AbstractTag;
 import seedu.address.model.tag.TagFactory;
 import seedu.address.storage.exceptions.DeserialisePersonException;
 import seedu.address.testutil.PersonBuilder;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static seedu.address.testutil.TypicalPersons.ALICE;
-import static seedu.address.testutil.TypicalPersons.BOB;
 
 public class CsvImporterTest {
 
@@ -134,7 +135,8 @@ public class CsvImporterTest {
                 new Position("Professors"),
                 Set.of(TagFactory.create("lecturer")),
                 Set.of(slot1, slot2));
-        String staffStrRep = "Professors,Prof Alice,91111111,profalice,profalice@example.com,lecturer,mon-10-12;wed-14-16";
+        String staffStrRep =
+                "Professors,Prof Alice,91111111,profalice,profalice@example.com,lecturer,mon-10-12;wed-14-16";
 
         Person staff = assertDoesNotThrow(() ->
                         CsvImporter.deserialisePerson(staffStrRep),
@@ -180,7 +182,8 @@ public class CsvImporterTest {
 
     @Test
     public void deserialisePerson_invalidPosField_throwsDeserialisePersonException() {
-        String personStrRep = "invalid,Prof Alice,91111111,profalice,profalice@example.com,lecturer,mon-10-12;wed-14-16";
+        String personStrRep =
+                "invalid,Prof Alice,91111111,profalice,profalice@example.com,lecturer,mon-10-12;wed-14-16";
         assertThrows(DeserialisePersonException.class, () -> CsvImporter.deserialisePerson(personStrRep));
     }
 
