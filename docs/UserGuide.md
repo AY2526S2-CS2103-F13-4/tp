@@ -74,6 +74,13 @@ title: User Guide
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
+### Types of tags
+- General purpose tags: Alphanumeric characters only (e.g. `examDuty`)
+- Special tags: these tags follow a specific format
+  - Tutorial groups: begins with `tut:`, followed by an optional uppercase letter and maximally 2 digits (e.g. `tut:A11`, `tut:17`, `tut:2`)
+  - Lab groups: begins with `lab:`, followed by an optional uppercase letter and maximally 2 digits (e.g. `lab:A11`, `lab:17`, `lab:2`)
+  - Course: begins with `course:`, followed 2-4 uppercase letters, proceeded by 4 digits and an optional uppercase suffix letter (e.g. `course:CS2103`, `course:CS2103T`, `course:GESS1000T`)
+
 ### Input history
 The `up` and `down` arrow keys can be used to navigate previously entered commands within the same session.
 
@@ -101,12 +108,13 @@ Adds a student to the address book.
 * `PHONE`: Exactly 8 digits. Must be unique.
 * `EMAIL`: Valid email format. Must be unique.
 * `USERNAME`: Alphanumeric characters only (no spaces or special characters). Must be unique.
-* `TAG`: Optional; can be used multiple times. Alphanumeric only.
+* `TAG`: Optional; can be used multiple times. See [Types of tags](#types-of-tags) for more details.
 
 **Examples:**
 
 * `add n/John Doe p/98765432 e/johnd@example.com u/johndoe123`
 * `add n/Betsy Crowe p/12345678 e/betsycrowe@example.com u/betsycrowe t/friend`
+* `add n/John Doe p/98765432 e/johnd@example.com u/johndoe123 t/course:CS2103` - Adds the student John Doe belonging to the course CS2103
 
 ---
 
@@ -124,7 +132,7 @@ Adds a teaching staff (tutor) to the address book. You can provide only the name
 * `EMAIL`: Valid email format. Must be unique.
 * `USERNAME`: Alphanumeric only. Must be unique.
 * `POSITION`: Must be one of: `Teaching Assistant`, `Professors`. If omitted, defaults to `Teaching Assistant`.
-* `TAG`: Optional; can be used multiple times.
+* `TAG`: Optional; can be used multiple times. See [Types of tags](#types-of-tags) for more details.
 
 **Behavior:**
 
@@ -240,6 +248,27 @@ Edits an existing person in the address book. For teaching staff, you can also c
 * `edit 1 p/91234567 e/johndoe@example.com` — Edits the 1st person's phone and email.
 * `edit 2 n/Betsy Crower t/` — Edits the 2nd person's name and clears all tags.
 * `staffslist` then `edit 1 pos/Professors` — Edits the 1st teaching staff's position to Professors.
+
+---
+
+### Adding tags to a person
+Appends tags to an existing person, without having to respecify all existing tags
+
+**Format:** `tag-add INDEX [t/TAG]…`
+
+**Parameters:**
+
+* `INDEX`: Must be a positive integer (1, 2, 3, …​) referring to the position in the **currently displayed** list.
+* `TAG`: At least one must be provided. Can be used multiple times. See [Types of tags](#types-of-tags) for more details.
+
+**Behavior:**
+
+* Unlike the `edit` command, `tag-add` will not override existing tags. Instead, all tags specified will be added to the person's list of tags.
+* A warning will be generated if any of the tags already exist (but command will still succeed)
+
+**Examples:**
+
+* `tag-add 1 t/needsHelp t/course:CS2103T t/tut:10` - Adds tags to indicate that the first visible person is in the course CS2103T who resides in tutorial group 10 and needs help
 
 ### Locating persons by name/tag: `find`
 
@@ -372,6 +401,7 @@ _Details coming soon ..._
 | **List students only** | `studentslist` |
 | **Tutor slot** | `tutorslot INDEX SLOT` <br> e.g., `tutorslot 1 mon-10-12` |
 | **Tutor dashboard** | `tutordashboard` |
+| **Add Tags** | `tag-add INDEX [t/TAG]…` <br> e.g., `tag-add 1 t/needsHelp t/course:CS2103T t/tut:10` |
 | **Edit** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [u/USERNAME] [pos/POSITION] [t/TAG]…​` <br> e.g., `edit 2 n/James Lee e/jameslee@example.com` or `edit 1 pos/Professors` (staff only) |
 | **Find** | `find KEYWORD [MORE_KEYWORDS]` <br> e.g., `find James Jake` |
 | **Delete** | `delete INDEX` <br> e.g., `delete 3` (index from current list: full, staff, or students) |
