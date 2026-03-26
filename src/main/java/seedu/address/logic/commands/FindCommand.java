@@ -15,7 +15,11 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.predicate.*;
+import seedu.address.model.person.predicate.EmailContainsKeywordsPredicate;
+import seedu.address.model.person.predicate.NameContainsKeywordsPredicate;
+import seedu.address.model.person.predicate.PhoneContainsSequencePredicate;
+import seedu.address.model.person.predicate.TagsContainsTagPredicate;
+import seedu.address.model.person.predicate.UsernameContainsKeywordsPredicate;
 import seedu.address.model.tag.AbstractTag;
 
 /**
