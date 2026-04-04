@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -113,8 +114,17 @@ public class FindCommand extends Command {
             setTags(toCopy.tags);
         }
 
+        private Set<String> cleanArgs(Set<String> raw) {
+            return raw.stream()
+                    .filter(x -> !x.isEmpty())
+                    .collect(Collectors.toSet());
+        }
+
         public void setName(Set<String> name) {
-            this.name = name;
+            name = cleanArgs(name);
+            if (!name.isEmpty()) {
+                this.name = name;
+            }
         }
 
         public Optional<Set<String>> getName() {
@@ -126,7 +136,10 @@ public class FindCommand extends Command {
         }
 
         public void setPhone(Set<String> phone) {
-            this.phone = phone;
+            phone = cleanArgs(phone);
+            if (!phone.isEmpty()) {
+                this.phone = phone;
+            }
         }
 
         public Optional<Set<String>> getPhone() {
@@ -138,7 +151,10 @@ public class FindCommand extends Command {
         }
 
         public void setEmail(Set<String> email) {
-            this.email = email;
+            email = cleanArgs(email);
+            if (!email.isEmpty()) {
+                this.email = email;
+            }
         }
 
         public Optional<Set<String>> getEmail() {
@@ -150,7 +166,10 @@ public class FindCommand extends Command {
         }
 
         public void setUsername(Set<String> username) {
-            this.username = username;
+            username = cleanArgs(username);
+            if (!username.isEmpty()) {
+                this.username = username;
+            }
         }
 
         public Optional<Set<String>> getUsername() {
