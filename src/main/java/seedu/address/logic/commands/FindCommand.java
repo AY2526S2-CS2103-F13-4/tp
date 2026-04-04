@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,13 +31,20 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
-            + "the specified keywords and/or who have any of the specified tags. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons who meets the following conditions:"
+            + "\n 1. name contains any of the specified keywords.\n"
+            + " 2. username contains any of the specified username keywords. Each defined with " + PREFIX_USERNAME
+            + " 3. phone contains any of the specified sequence. Each defined with " + PREFIX_PHONE+ ".\n"
+            + " 4. person who have the exact tags. Each defined with " + PREFIX_TAG + ".\n"
             + "Parameters: "
             + "[KEYWORD [MORE_KEYWORDS]...] "
+            + "[" + PREFIX_EMAIL + "EMAIL [MORE_EMAIL]...] "
+            + "[" + PREFIX_USERNAME + "USERNAME [MORE_USERNAMES]...] "
+            + "[" + PREFIX_PHONE + "PHONE [MORE_PHONES]...] "
             + "[" + PREFIX_TAG + "TAG [MORE_TAGS]...]\n"
-            + "Note: At least one of KEYWORD or TAG must be provided.\n"
-            + "Example: " + COMMAND_WORD + " alice bob " + PREFIX_TAG + "friends";
+            + "Note: At least one of KEYWORD, EMAIL, USERNAME, PHONE or TAG must be provided.\n"
+            + "Example: " + COMMAND_WORD + " alice bob " + PREFIX_TAG + "friends " + PREFIX_EMAIL + "email "
+            + PREFIX_USERNAME + "username1 " + PREFIX_USERNAME + "username2 " + PREFIX_PHONE + "9123";
 
     private final FindPersonDescriptor findPersonDescriptor;
 
