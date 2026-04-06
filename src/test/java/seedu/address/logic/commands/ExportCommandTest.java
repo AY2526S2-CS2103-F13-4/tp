@@ -9,6 +9,8 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -39,6 +41,7 @@ public class ExportCommandTest {
     }
 
     @Test
+    @EnabledOnOs({OS.WINDOWS})
     public void execute_invalidFilePath_throwsCommandException() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         String invalidFilePath = "<bad>.csv";
