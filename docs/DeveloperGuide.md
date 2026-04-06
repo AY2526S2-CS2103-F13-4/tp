@@ -4,7 +4,7 @@ title: Developer Guide
 ---
 
 * Table of Contents
-  {:toc}
+{:toc}
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -218,9 +218,10 @@ The address book holds a single list of `Person` objects. Two types of persons a
 
 * **Students** — base `Person` instances, added with `add n/NAME p/... e/... u/...`.
 * **Teaching staff** — `TeachingStaff` instances (extend `Person`) with an additional `Position` field. Added with
-  `add staff n/NAME` (name only; phone, email, username and position default) or
-  `add staff n/NAME p/... e/... u/... pos/POSITION` (all fields). `Position` is restricted to "Teaching Assistant" or "
-  Professors".
+  `add staff n/NAME p/... e/... u/... [pos/POSITION]` where name, phone, email, username are mandatory and
+  `pos/POSITION` is optional. `Position` is restricted to "Teaching Assistant" or "Professors".
+
+Phone numbers are validated as Singapore numbers (`[3689]\\d{7}`): exactly 8 digits, starting with 3, 6, 8, or 9.
 
 The UI and commands treat both types uniformly as `Person` where possible (e.g. `find`, `delete` by index). The filtered
 list in the model can show all persons (`list`), only teaching staff (`staffslist`), or only students (`studentslist`)
@@ -256,6 +257,7 @@ The feature is implemented across the following components:
 
 * `TimeSlot` — An immutable value object containing a `DayOfWeek`, a `LocalTime` start, and a `LocalTime` end. Supports
   parsing from string format `DAY-START-END` (e.g., `mon-10-12`). Implements `Comparable<TimeSlot>` for sorted display.
+  Crossing-midnight slots are intentionally not supported in this format.
 * `TeachingStaff` — Extended with a `Set<TimeSlot> availability` field. A new constructor accepts availability alongside
   existing fields. The `getAvailability()` method returns an unmodifiable set.
 
@@ -264,7 +266,7 @@ The feature is implemented across the following components:
 * `TutorSlotCommand` — Takes an `Index` and a `TimeSlot`. On execution, it:
     1. Retrieves the person at the given index from the filtered list.
     2. Validates that the person is a `TeachingStaff` instance.
-    3. Checks for duplicate time slots.
+    3. Checks for overlapping time slots on the same day (exact duplicates are a subset of overlap).
     4. Constructs a new `TeachingStaff` with the slot added (preserving immutability).
     5. Replaces the old person in the model via `Model#setPerson()`.
 * `TutorSlotCommandParser` — Parses `INDEX SLOT` from user input, delegating to `ParserUtil#parseTimeSlot()` for
@@ -305,6 +307,7 @@ Key design decisions:
   ordering (day-of-week first, then start time) via its `Comparable` implementation.
 * **No model mutation** — the command produces only a `CommandResult`; it does not modify any data.
 * **No parser needed** — the command takes no arguments and is returned directly by `AddressBookParser`.
+  Extra trailing arguments are currently ignored for no-argument commands (e.g., `tutordashboard foo`).
 
 The following sequence diagram shows how the `tutordashboard` command is executed:
 
@@ -410,6 +413,30 @@ The feature is implemented across the following components:
 * **Alternative 2:** Place all import logic in `ImportCommand`.
     * Pros: The logic is contained within a single class, making it easy to read and understand.
     * Cons: Difficult to test deserialisation logic separately.
+
+### Double Confirmation
+
+#### Overview
+
+Certain commands that are destructive or irreversible — currently `delete` and `clear` — require the user to explicitly confirm before they are executed. These commands implement the `CriticalCommand` marker interface, which causes `AddressBookParser` to intercept them and wrap them in a `RequireConfirmationCommand` instead of executing them directly.
+
+#### Implementation
+
+The feature introduces the following classes:
+
+* `CriticalCommand` — Marker interface. Any command implementing it will be intercepted by `AddressBookParser` and require confirmation before execution.
+* `RequireConfirmationCommand` — Wraps a `CriticalCommand`. On execution, it stores the wrapped command as a pending command in `Model` and returns a `CommandResult` with `pending=true`, prompting the user to confirm.
+* `AnswerConfirmationCommand` — Handles the user's `Y` or `N` response. On `Y`, it retrieves and executes the pending command from `Model`. On `N`, it returns a cancellation message.
+* `CommandResult#isPending()` — Flag that tells `LogicManager` not to clear the pending command from `Model` when `true`.
+* `Model#pendingCommand` — Field in `ModelManager` that holds the deferred command between the two interactions.
+
+The following sequence diagram shows how a critical command (e.g. `delete 1`) is intercepted and a confirmation prompt is issued:
+
+<img src="images/RequireConfirmationSequenceDiagram.png" />
+
+The following sequence diagram shows how the user's answer (`Y` to confirm, `N` to cancel) is handled:
+
+<img src="images/AnswerConfirmationSequenceDiagram.png" />
 
 ### \[Proposed\] Undo/redo feature
 
@@ -714,9 +741,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 4.
 
-* 4c. The time slot already exists for this staff member.
+* 4c. The time slot overlaps with an existing slot for this staff member.
 
-    * 4c1. Doritus shows an error message indicating the duplicate slot.
+    * 4c1. Doritus shows an error message indicating the overlap.
 
       Use case resumes at step 4.
 
@@ -926,6 +953,37 @@ testers are expected to do more *exploratory* testing.
        Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
+
+### Staff listing and dashboard
+
+1. `staffslist` and `tutordashboard` ignore extra parameters
+
+    1. Test case: `staffslist anything`<br>
+       Expected: Command succeeds and displays only teaching staff.
+
+    1. Test case: `tutordashboard foo`<br>
+       Expected: Command succeeds and shows full staff availability dashboard.
+
+### Tutor slot validation
+
+1. Add a valid slot
+
+    1. Prerequisites: `staffslist` shows at least one teaching staff.
+
+    1. Test case: `tutorslot 1 mon-10-12`<br>
+       Expected: Slot is added to the first listed teaching staff.
+
+1. Reject overlapping slot
+
+    1. Prerequisites: Execute `tutorslot 1 mon-10-12` first.
+
+    1. Test case: `tutorslot 1 mon-10-11`<br>
+       Expected: Command fails with overlap-related error.
+
+1. Reject crossing-midnight slot
+
+    1. Test case: `tutorslot 1 mon-23-24`<br>
+       Expected: Command fails because the current slot format does not support crossing midnight.
 
 ### Saving data
 
