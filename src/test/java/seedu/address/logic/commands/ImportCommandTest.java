@@ -77,8 +77,7 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(invalidFilePath);
         assertThrows(
                 CommandException.class,
-                ImportCommand.MESSAGE_INVALID_PATH_EXCEPTION,
-                () -> importCommand.execute(model)
+                ImportCommand.MESSAGE_INVALID_PATH_EXCEPTION, () -> importCommand.execute(model)
         );
     }
 
