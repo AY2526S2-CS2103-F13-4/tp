@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.util.Objects;
@@ -9,6 +10,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.storage.CsvImporter;
 import seedu.address.storage.exceptions.DeserialisePersonException;
+import seedu.address.storage.exceptions.InvalidHeaderRowException;
 
 /**
  * Imports contacts saved in CSV file into the address book.
@@ -26,7 +28,7 @@ public class ImportCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Successfully imported contacts from %s ";
     public static final String MESSAGE_IO_EXCEPTION = "Error occurred while reading from file";
     public static final String MESSAGE_INVALID_PATH_EXCEPTION = "Error occurred, invalid file path given";
-    public static final String MESSAGE_DESERIALISE_EXCEPTION = "Error occurred while deserialising contacts";
+    public static final String MESSAGE_DESERIALISE_EXCEPTION = "Error, unable to deserialise contacts, invalid csv";
 
     private final String filePath;
 
@@ -53,10 +55,10 @@ public class ImportCommand extends Command {
             return new CommandResult(String.format(MESSAGE_SUCCESS, filePath));
         } catch (InvalidPathException e) {
             throw new CommandException(MESSAGE_INVALID_PATH_EXCEPTION);
+        } catch (EOFException | InvalidHeaderRowException | DeserialisePersonException e) {
+            throw new CommandException(MESSAGE_DESERIALISE_EXCEPTION);
         } catch (IOException e) {
             throw new CommandException(MESSAGE_IO_EXCEPTION);
-        } catch (DeserialisePersonException e) {
-            throw new CommandException(MESSAGE_DESERIALISE_EXCEPTION);
         }
     }
 

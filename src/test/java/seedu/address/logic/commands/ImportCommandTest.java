@@ -69,7 +69,7 @@ public class ImportCommandTest {
 
 
     @Test
-    @EnabledOnOs(OS.WINDOWS) // the paths here only only considered invalid in Windows, valid in Linux and MacOS
+    @EnabledOnOs(OS.WINDOWS) // the paths here are only considered invalid in Windows, valid in Linux and MacOS
     public void execute_windowsInvalidFilePath_throwsCommandException() throws CommandException {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
@@ -80,6 +80,90 @@ public class ImportCommandTest {
                 ImportCommand.MESSAGE_INVALID_PATH_EXCEPTION, () -> importCommand.execute(model)
         );
     }
+
+    @Test
+    public void execute_emptyCsvFile_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        String csv = "";
+        Path filePath = tempDir.resolve("contacts.csv");
+        assertDoesNotThrow(() -> Files.writeString(filePath, csv));
+
+        ImportCommand importCommand = new ImportCommand(filePath.toString());
+        assertThrows(
+                CommandException.class,
+                ImportCommand.MESSAGE_DESERIALISE_EXCEPTION, () -> importCommand.execute(model)
+        );
+    }
+
+
+    @Test
+    public void execute_noHeaderRowCsvFile_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        String aliceCsvRep = "Student,";
+        aliceCsvRep += ALICE.getName().fullName + ",";
+        aliceCsvRep += ALICE.getPhone().value + ",";
+        aliceCsvRep += ALICE.getUsername().value + ",";
+        aliceCsvRep += ALICE.getEmail().value + ",";
+        aliceCsvRep += ALICE.getTags().stream().map(AbstractTag::getTagName).collect(Collectors.joining(";"));
+        aliceCsvRep += "\n";
+
+        String csv = aliceCsvRep;
+
+        Path filePath = tempDir.resolve("contacts.csv");
+        assertDoesNotThrow(() -> Files.writeString(filePath, csv));
+
+        ImportCommand importCommand = new ImportCommand(filePath.toString());
+        assertThrows(
+                CommandException.class,
+                ImportCommand.MESSAGE_DESERIALISE_EXCEPTION, () -> importCommand.execute(model)
+        );
+    }
+
+
+    @Test
+    public void execute_invalidHeaderRowCsvFile_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        String aliceCsvRep = "Student,";
+        aliceCsvRep += ALICE.getName().fullName + ",";
+        aliceCsvRep += ALICE.getPhone().value + ",";
+        aliceCsvRep += ALICE.getUsername().value + ",";
+        aliceCsvRep += ALICE.getEmail().value + ",";
+        aliceCsvRep += ALICE.getTags().stream().map(AbstractTag::getTagName).collect(Collectors.joining(";"));
+        aliceCsvRep += "\n";
+
+        String invalidHeader = "swndf3eugb4ub\n";
+
+        String csv = invalidHeader + aliceCsvRep;
+
+        Path filePath = tempDir.resolve("contacts.csv");
+        assertDoesNotThrow(() -> Files.writeString(filePath, csv));
+
+        ImportCommand importCommand = new ImportCommand(filePath.toString());
+        assertThrows(
+                CommandException.class,
+                ImportCommand.MESSAGE_DESERIALISE_EXCEPTION, () -> importCommand.execute(model)
+        );
+    }
+
+
+    @Test
+    public void execute_validHeaderOnly_success() throws CommandException {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        String csv = CsvExporter.HEADERS;
+
+        Path filePath = tempDir.resolve("contacts.csv");
+        assertDoesNotThrow(() -> Files.writeString(filePath, csv));
+
+        ImportCommand importCommand = new ImportCommand(filePath.toString());
+        CommandResult result = importCommand.execute(model);
+
+        String expectedMessage = String.format(ImportCommand.MESSAGE_SUCCESS, filePath);
+        assertEquals(expectedMessage, result.getFeedbackToUser());
+    }
+
 
     @Test
     public void equals() {
