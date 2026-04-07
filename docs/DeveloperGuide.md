@@ -424,7 +424,7 @@ Certain commands that are destructive or irreversible — currently `delete` and
 
 The feature introduces the following classes:
 
-* `CriticalCommand` — Marker interface. Any command implementing it will be intercepted by `AddressBookParser` and require confirmation before execution.
+* `CriticalCommand` — Any command implementing it will be intercepted by `AddressBookParser` and require confirmation before execution, and have a verification step before requiring confirmation.
 * `RequireConfirmationCommand` — Wraps a `CriticalCommand`. On execution, it stores the wrapped command as a pending command in `Model` and returns a `CommandResult` with `pending=true`, prompting the user to confirm.
 * `AnswerConfirmationCommand` — Handles the user's `Y` or `N` response. On `Y`, it retrieves and executes the pending command from `Model`. On `N`, it returns a cancellation message.
 * `CommandResult#isPending()` — Flag that tells `LogicManager` not to clear the pending command from `Model` when `true`.
