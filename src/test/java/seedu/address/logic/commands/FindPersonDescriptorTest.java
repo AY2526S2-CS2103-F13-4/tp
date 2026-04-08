@@ -80,6 +80,43 @@ public class FindPersonDescriptorTest {
     }
 
     @Test
+    public void equals_with_invalid() {
+        // same values -> returns true
+        FindPersonDescriptor fdOne;
+        FindPersonDescriptor fdTwo;
+
+        // same names with 1 being invalid -> returns true
+        fdOne = new FindPersonDescriptor();
+        fdTwo = new FindPersonDescriptor();
+        fdOne.setName(Set.of("test1", "test2", "test3"));
+        fdTwo.setName(Set.of("test1", "test2", "test3", "test4,"));
+        assertTrue(fdOne.equals(fdTwo));
+
+        // same phones with 1 being invalid -> returns true
+        fdOne = new FindPersonDescriptor();
+        fdTwo = new FindPersonDescriptor();
+        fdOne.setPhone(Set.of("123", "9123456789", "91234567", "test3"));
+        fdTwo.setPhone(Set.of("123", "91234567"));
+        assertTrue(fdOne.equals(fdTwo));
+
+        // same emails with 1 being invalid -> returns true
+        fdOne = new FindPersonDescriptor();
+        fdTwo = new FindPersonDescriptor();
+        fdOne.setEmail(Set.of("user", "gmail.com", "user@email.com", "ser@gma", "ser@gmail.com", "+user",
+                "+user@gmail.com", "user,"));
+        fdTwo.setEmail(Set.of("user", "gmail.com", "user@email.com", "ser@gma", "ser@gmail.com", "+user",
+                "+user@gmail.com"));
+        assertTrue(fdOne.equals(fdTwo));
+
+        // same usernames with 1 being invalid -> returns true
+        fdOne = new FindPersonDescriptor();
+        fdTwo = new FindPersonDescriptor();
+        fdOne.setUsername(Set.of("alice", "alice,", "alice bob"));
+        fdTwo.setUsername(Set.of("alice"));
+        assertTrue(fdOne.equals(fdTwo));
+    }
+
+    @Test
     public void toStringMethod() {
         FindPersonDescriptor fd = new FindPersonDescriptor();
         String expected = FindPersonDescriptor.class.getCanonicalName() + "{name="
