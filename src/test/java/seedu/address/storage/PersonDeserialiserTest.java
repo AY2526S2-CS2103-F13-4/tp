@@ -147,7 +147,7 @@ public class PersonDeserialiserTest {
     }
 
     @Test
-    public void deserialise_personStrRepEndsWithNameFieldWithOnlyStartingDoubleQuote_throwsDeserialisePersonException() {
+    public void deserialise_personStrRepEndsWithNameFieldOfBeginDoubleQuoteOnly_throwsDeserialisePersonException() {
         String personStrRep = "Student,\"";
         PersonDeserialiser deserialiser = new PersonDeserialiser(personStrRep);
         assertThrows(DeserialisePersonException.class, () -> deserialiser.deserialise());
