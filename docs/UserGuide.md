@@ -125,7 +125,20 @@ Adds a student to the address book.
 
 **Parameters:**
 
-* `NAME`: Alphanumeric characters and single spaces only (cannot be blank; consecutive spaces not allowed).
+* `NAME`: Required.
+    * Constraints for names:
+        * Use only letters, numbers, and symbols: `/`, `,`, `-`, `'`, `(` and `)`
+        * Cannot be empty or only whitespace.
+        * Use only a single space or hyphen between words.
+        * Must only start and end with alphanumeric character, i.e, no trailing non-alphanumeric characters.
+        * Parentheses must be at the end, properly ordered, i.e, open bracket `(` must always be followed with close bracket `)`, and non-empty.
+    * Valid Examples:
+        * John Doe
+        * David, Tan Ah Khow
+        * Lily-Rose
+        * Ronald O'Donald
+        * Soh La Min (Su La Min)
+        * Child S/O Father
 * `PHONE`: Valid Singapore phone number. Exactly 8 digits, must start with `3`, `6`, `8`, or `9`. Must be unique.
 * `EMAIL`: Valid email format. Must be unique.
 * `USERNAME`: Alphanumeric characters only (no spaces or special characters). Must be unique.
