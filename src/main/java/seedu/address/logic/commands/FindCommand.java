@@ -42,7 +42,7 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons who meets the following conditions:"
-            + "\n 1. name contains any of the specified NAME keywords.\n"
+            + "\n 1. name contains any of the specified name keywords. Each defined with " + PREFIX_NAME + ".\n"
             + " 2. username contains any of the specified username keywords. Each defined with " + PREFIX_USERNAME
             + ".\n 3. phone contains any of the specified sequence. Each defined with " + PREFIX_PHONE + ".\n"
             + " 4. person who have the exact tags. Each defined with " + PREFIX_TAG + ".\n"
@@ -53,7 +53,8 @@ public class FindCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE [MORE_PHONES]...] "
             + "[" + PREFIX_TAG + "TAG [MORE_TAGS]...]\n"
             + "Note: At least one of KEYWORD, EMAIL, USERNAME, PHONE or TAG must be provided.\n"
-            + "      Name keywords should not start or end with a symbol"
+            + "      All keywords should be a valid substring of their respective constraints.\n"
+            + "      Name keywords must start start and end with alphanumeric character.\n"
             + "Example: " + COMMAND_WORD + " alice bob " + PREFIX_TAG + "friends " + PREFIX_EMAIL + "email "
             + PREFIX_USERNAME + "username1 " + PREFIX_USERNAME + "username2 " + PREFIX_PHONE + "9123";
 
