@@ -384,9 +384,11 @@ Finds persons whose names contain any of the given keywords and/or who have any 
     * Persons matching at least one keyword will be returned (i.e. `OR` search)
     * Keywords is matched using substring e.g. `ice` will match `alice`
 
-* **Phone Sequence search:** Sequence match against person phone (numeric only)
-    * Persons phone matching at least one sequence will be returned (i.e. `OR` search)
-    * Keywords is matched using substring e.g. `456` will match `91234567`
+* **Phone Sequence search:** Each `p/` value is a **digit-only** sequence used to search within stored phone numbers.
+    * Each sequence must be **1 to 8 digits** (no spaces or other characters). Values with more than 8 digits are not
+      accepted.
+    * Matching is by **substring** on the person’s phone: e.g. `456` matches `91234567`.
+    * Persons whose phone matches at least one given sequence are returned (i.e. `OR` search across `p/` values).
 
 * **Combined search:** If both keywords and tags are provided, persons must match at least one keyword **AND** at least
   one tag (i.e. `AND` between name and tag criteria)

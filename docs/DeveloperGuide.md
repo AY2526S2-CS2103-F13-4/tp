@@ -478,13 +478,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | Priority | As a …​                            | I want to …​                                           | So that I can…​                                                        |
 |----------|------------------------------------|--------------------------------------------------------|------------------------------------------------------------------------|
 | `* * *`  | new user                           | see usage instructions                                 | refer to instructions when I forget how to use the Doritus             |
-| `* * *`  | user                               | add a new contact                                      | store their student ID and contact details for future reference        |
+| `* * *`  | user                               | add a new contact                                      | store **contact details** (name, phone, email, username, and optional tags) for future reference |
 | `* * *`  | user                               | delete a contact                                       | remove withdrawn students or duplicate entries                         |
-| `* * *`  | user                               | find a person by name or ID                            | locate details of persons without having to go through the entire list |
+| `* * *`  | user                               | find a person by **name, phone, email, username, or tags** | locate details of persons without having to go through the entire list |
 | `* * *`  | professor                          | add tags to contacts                                   | categorize students by course, tutorial, or lab                        |
-| `* *`    | professor that teach many students | sort persons by name or ID                             | locate a person easily                                                 |
+| `* *`    | professor that teach many students | search and filter contacts (e.g. using `find`, `list`, `staffslist`, or `studentslist`) | locate a person easily                                                 |
 | `* *`    | professor that teach many courses  | search persons by tags                                 | locate details of persons in a course, tutorial, or lab easily         |
-| `* *`    | forgetful user                     | perform fuzzy and partially maching searchs                  | locate a person without remembering the full name of that person        |
+| `* *`    | forgetful user                     | perform fuzzy and partially matching searches                  | locate a person without remembering the full name of that person        |
 | `*`      | professor that works in a group    | selectively import and export contacts in some formats | share contacts data with others                                        |
 | `* *`    | user                               | see contextual error messages when a command fails     | know what is the problem and fix it                                    |
 | `*`      | user                               | access my input history                                | run similar commands easily                                            |
@@ -495,6 +495,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*`      | professor                          | record short notes about students                      | recall important context when meeting them again in future semesters   |
 | `* *`    | tutor/professor                    | state when I am available to teach                     | specify my availability so students know when I can teach              |
 | `* *`    | tutor/professor                    | view the availability of all tutors in one place       | see who is able to teach at a glance                                   |
+
+**Note (student ID and “ID” in user stories):** Doritus does **not** store or validate a separate NUS **Student ID** field; identity in the app is based on **name, phone, email, username** (and teaching-staff **position**), as described under *Duplicate contacts* in the User Guide and under **Student ID** in the [Glossary](#glossary) below. The **username** is the main user-chosen identifier analogous to an “ID” in some workflows. There is **no** dedicated “sort by name or ID” command: users narrow the list using **`find`** and the list commands (`list`, `staffslist`, `studentslist`).
 
 ### Use cases
 
@@ -747,22 +749,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to see instructions for a specific command
-2. System shows instructions for the command
+1. User requests help (e.g. enters `help`).
+2. Doritus opens the **help window** (command reference content) and shows a short message in the command result area
+   (e.g. confirming that help was opened). Full command text is **not** listed in the result panel; users read commands
+   in the help window (or the User Guide).
 
    Use case ends.
 
 **Extensions**
 
-* 1a. User does not specify a command.
+* 1a. User types extra text after `help` (e.g. `help 123`).
 
-    * 1a1. System shows instructions for all commands.
+    * 1a1. Doritus treats the input as `help` (extraneous parameters are ignored, per the User Guide) and proceeds as in
+      the MSS.
 
       Use case ends.
 
-* 1b. User specifies an invalid command.
+* 1b. User specifies an invalid command (not recognised by the application).
 
-    * 1b1. System shows an error message.
+    * 1b1. Doritus shows an error message.
 
       Use case resumes at step 1.
 
