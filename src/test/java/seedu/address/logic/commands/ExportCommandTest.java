@@ -132,6 +132,35 @@ public class ExportCommandTest {
     }
 
     @Test
+    public void execute_filePathWithoutParent_success() throws Exception {
+        // A bare filename has no parent directory
+        String fileName = "contacts.csv";
+
+        // Run the command from inside tempDir so the file doesn't pollute the project
+        // root.
+        // Easiest: resolve against tempDir but pass only the filename... that won't
+        // work
+        // because Paths.get(fileName) is resolved against the JVM's working directory.
+        // So instead, change approach: use an absolute path whose parent is the
+        // filesystem root,
+        // OR just accept writing to the working dir and clean up.
+
+        Path target = Path.of(fileName);
+        try {
+            ExportCommand command = new ExportCommand(fileName);
+            Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+            CommandResult result = command.execute(model);
+
+            assertTrue(Files.exists(target));
+            assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, fileName),
+                    result.getFeedbackToUser());
+        } finally {
+            Files.deleteIfExists(target); // cleanup
+        }
+    }
+
+    @Test
     public void equals() {
         String filePath1 = "contacts1.csv";
         String filePath2 = "contacts2.csv";
