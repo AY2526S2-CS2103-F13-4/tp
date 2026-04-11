@@ -37,8 +37,7 @@ import seedu.address.logic.commands.StudentListCommand;
 import seedu.address.logic.commands.TutorDashboardCommand;
 import seedu.address.logic.commands.TutorSlotCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Person;
-import seedu.address.model.person.TimeSlot;
+import seedu.address.model.person.*;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
@@ -104,6 +103,14 @@ public class AddressBookParserTest {
         FindPersonDescriptor fd = new FindPersonDescriptor();
         fd.setName(new HashSet<>(keywords));
         assertEquals(new FindCommand(fd), command);
+
+        assertThrows(ParseException.class, Name.MESSAGE_FIND_NAME_VALIDATE_ERROR,
+                () -> parser.parseCommand(FindCommand.COMMAND_WORD + " @@@" ));
+        assertThrows(ParseException.class, Email.MESSAGE_FIND_EMAIL_VALIDATE_ERROR,
+                () -> parser.parseCommand(FindCommand.COMMAND_WORD + " e/," ));
+        assertThrows(ParseException.class, Phone.MESSAGE_FIND_PHONE_VALIDATE_ERROR,
+                () -> parser.parseCommand(FindCommand.COMMAND_WORD + " p/aaa" ));
+
     }
 
     @Test
